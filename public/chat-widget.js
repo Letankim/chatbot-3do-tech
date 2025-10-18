@@ -3,7 +3,7 @@
   const urlParams = new URLSearchParams(scriptSrc.split("?")[1])
   const API_KEY = urlParams.get("api_key") || ""
   const THEME_ID = urlParams.get("theme_id") || ""
-  const API_BASE = urlParams.get("api_base") || "https://3docorp.id.vn/rental"
+  const API_BASE = "https://3docorp.id.vn/rental"
   const INCLUDE_PRODUCTS = urlParams.get("include_products") === "true"
 
   if (!API_KEY) {
@@ -64,7 +64,6 @@
 
   let isThemeLoaded = false
 
-  // Fetch theme from API
   async function loadTheme() {
     if (!THEME_ID) {
       console.log("[Chat Widget] No theme_id provided, using default theme")
@@ -85,13 +84,9 @@
         if (theme && theme.style) {
           const style = typeof theme.style === "string" ? JSON.parse(theme.style) : theme.style
           currentTheme = { ...currentTheme,...style }
-          console.log("[Chat Widget] Theme loaded successfully:",currentTheme)
-        } else {
-          console.warn("[Chat Widget] Theme not found, using default")
         }
       }
     } catch (error) {
-      console.error("[Chat Widget] Failed to load theme:",error)
     } finally {
       isThemeLoaded = true
       initializeWidget()
@@ -106,7 +101,6 @@
     } else if (iconType === "image") {
       return `<img src="${icon}" alt="Icon" style="width: 20px; height: 20px; object-fit: contain;" />`
     }
-    // Default emoji
     return `<span style="font-size: 20px; display: flex; align-items: center; justify-content: center;">${icon}</span>`
   }
 
@@ -172,7 +166,6 @@
       return `background: ${currentTheme.sendButtonBg};`
     }
 
-    // Dynamic styles based on theme
     const styles = `
       * {
         font-family: ${currentTheme.fontFamily || "system-ui"}, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -889,7 +882,7 @@
       }
 
       if (currentTheme.google_app_script_link) {
-        fetch(currentTheme.google_app_script_link,{
+        fetch(`${API_BASE}/send-to-sheet`,{
           method: "POST",
           mode: "no-cors",
           body: JSON.stringify(data),
