@@ -884,7 +884,7 @@
       if (currentTheme.google_app_script_link) {
         const payload = {
           ...data,
-          theme_id: currentTheme.id || currentTheme.theme_id,
+          theme_id: THEME_ID,
         };
 
         fetch(`${API_BASE}/user/send-to-sheet`,{
