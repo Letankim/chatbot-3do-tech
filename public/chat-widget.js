@@ -884,10 +884,17 @@
       if (currentTheme.google_app_script_link) {
         fetch(`${API_BASE}/send-to-sheet`,{
           method: "POST",
-          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+            "X-API-Key": API_KEY
+          },
           body: JSON.stringify(data),
-        }).catch((e) => console.error("[Chat Widget] Error sending to Google Apps Script:",e))
+        })
+          .then(res => res.json())
+          .then(console.log)
+          .catch((e) => console.error("[Chat Widget] Error sending to Google Apps Script:",e));
       }
+
 
       try {
         localStorage.setItem(`user_info_submitted_${API_KEY}`,"true")
@@ -1117,7 +1124,10 @@
 
       fetch(`${API_BASE}/api/chat`,{
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Key": API_KEY
+        },
         body: JSON.stringify({
           api_key: API_KEY,
           message: message,
