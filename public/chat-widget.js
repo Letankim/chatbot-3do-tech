@@ -882,7 +882,7 @@
       }
 
       if (currentTheme.google_app_script_link) {
-        fetch(`${API_BASE}/send-to-sheet`,{
+        fetch(`${API_BASE}/user/send-to-sheet`,{
           method: "POST",
           headers: {
             "Content-Type": "application/json",
