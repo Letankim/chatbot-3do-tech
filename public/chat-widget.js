@@ -882,18 +882,32 @@
       }
 
       if (currentTheme.google_app_script_link) {
+        const payload = {
+          ...data,
+          theme_id: currentTheme.id || currentTheme.theme_id,
+        };
+
         fetch(`${API_BASE}/user/send-to-sheet`,{
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-API-Key": API_KEY
+            "X-API-Key": API_KEY,
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload),
         })
-          .then(res => res.json())
-          .then(console.log)
-          .catch((e) => console.error("[Chat Widget] Error sending to Google Apps Script:",e));
+          .then(async (res) => {
+            if (!res.ok) {
+              const err = await res.text();
+              throw new Error(`HTTP ${res.status}: ${err}`);
+            }
+            return res.json();
+          })
+          .then((json) => console.log("[Chat Widget] Sent successfully:",json))
+          .catch((e) =>
+            console.error("[Chat Widget] Error sending to Google Apps Script:",e)
+          );
       }
+
 
 
       try {
